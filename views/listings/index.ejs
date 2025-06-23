@@ -1,22 +1,311 @@
 <% layout("layouts/boilerplate") %>
+
+<style>
+    /* ===== FILTERS ===== */
+    #filters {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 1rem 2rem;
+        align-items: center;
+        gap: 1rem;
+        background: #fff;
+        border-bottom: 1px solid #e0e0e0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .filter {
+        text-align: center;
+        padding: 0.5rem;
+        min-width: 4rem;
+        border-radius: 0.8rem;
+        transition: all 0.3s ease;
+        opacity: 0.8;
+        color: #333;
+    }
+    .filter:hover {
+        opacity: 1;
+        transform: scale(1.1);
+        background-color: #f7f7f7;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .filter i {
+        font-size: 1.4rem;
+        color: #fe424d;
+    }
+    .filter p {
+        font-size: 0.75rem;
+        margin: 0.3rem 0 0;
+    }
+
+    /* ===== TAX TOGGLE ===== */
+    .tax-toggle {
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        background-color: #fafafa;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        margin-left: auto;
+        height: 3.25rem;
+    }
+    .tax-toggle label {
+        font-size: 0.85rem;
+        margin-left: 0.5rem;
+    }
+
+    /* ===== CARD PRICE ===== */
+    .card-price,
+    .tax-card-price {
+        font-size: 1rem;
+        color: #222;
+        margin-bottom: 0.25rem;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .tax-card-price i {
+        display: block;
+        font-style: normal;
+        font-size: 0.75rem;
+        color: #e63946;
+        margin-top: 2px;
+
+    }
+
+    .card-price { display: block; }
+    .tax-card-price { display: none; }
+    #filters {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  overflow-x: auto;   /* Enable horizontal scroll */
+  padding: 1rem 2rem;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+#filters {
+  position: relative;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.2rem;
+  padding: 1rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+
+.filter,
+.tax-toggle {
+  flex: 0 0 auto; /* Prevent shrinking, allow scroll */
+}
+
+/* Desktop toggle (inside filters) */
+.tax-desktop {
+  margin-left: auto;
+}
+
+/* Mobile toggle container */
+.tax-mobile-wrapper {
+  display: none;
+  background: #fff;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+
+
+
+/* Responsive visibility */
+@media (max-width: 768px) {
+  .tax-desktop {
+    display: none !important;
+  }
+
+  .tax-mobile-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .tax-mobile {
+    width: 100%;
+    max-width: 400px;
+  }
+    .tax-toggle {
+        justify-content: center;
+    }
+    
+/* === Scrollbar Styling for WebKit Browsers === */
+::-webkit-scrollbar {
+  height: 5px;
+}
+
+
+
+::-webkit-scrollbar-thumb {
+  background-color: #e63946;  /* Dark orange-red thumb */
+  border-radius: 40px;
+  /* border: 2px solid #f0f0f0; */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #e63946;  
+}
+}
+@media (max-width: 425px) {
+
+
+}
+/* ==== Orange Switch Styling ==== */
+/* === Orange Thumb When OFF (Unchecked) === */
+.form-switch .form-check-input {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23e63946'/%3e%3c/svg%3e");
+  cursor: pointer;
+}
+
+/* === Red Background + White Thumb When ON (Checked) === */
+.form-switch .form-check-input:checked {
+  background-color: #e63946 !important;
+  border-color: #e63946 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+}
+
+/* === Focus/Hover Effects === */
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(230, 57, 70, 0.25) !important;
+}
+
+.form-check-input:hover {
+  box-shadow: 0 0 0 0.15rem rgba(230, 57, 70, 0.3);
+}
+
+/* === Smooth Transition === */
+.form-check-input {
+  transition: all 0.3s ease-in-out;
+}
+.filter.active {
+  background-color: #fe424d;
+  color: white;
+  opacity: 1;
+}
+
+.filter.active i {
+  color: white;
+}
+
+
+</style>
+
 <body>
-    <h3>ALL Listings</h3>
+    <div id="filters">
+  <!-- FILTER BUTTONS -->
+  <div class="filter" data-category="all"><div><i class="fa-solid fa-globe"></i></div><p>All</p></div>
+  <div class="filter" data-category="trending"><div><i class="fa-solid fa-fire"></i></div><p>Trending</p></div>
+  <div class="filter" data-category="rooms"><div><i class="fa-solid fa-bed"></i></div><p>Rooms</p></div>
+  <div class="filter" data-category="iconic-cities"><div><i class="fa-solid fa-mountain-city"></i></div><p>Iconic cities</p></div>
+  <div class="filter" data-category="mountains"><div><i class="fa-solid fa-mountain"></i></div><p>Mountains</p></div>
+  <div class="filter" data-category="castles"><div><i class="fa-solid fa-chess-rook"></i></div><p>Castles</p></div>
+  <div class="filter" data-category="amazing-pools"><div><i class="fa-solid fa-person-swimming"></i></div><p>Amazing Pools</p></div>
+  <div class="filter" data-category="camping"><div><i class="fa-solid fa-campground"></i></div><p>Camping</p></div>
+  <div class="filter" data-category="farms"><div><i class="fa-solid fa-cow"></i></div><p>Farms</p></div>
+  <div class="filter" data-category="arctic"><div><i class="fa-solid fa-snowflake"></i></div><p>Arctic</p></div>
+  <div class="filter" data-category="domes"><div><i class="fa-solid fa-igloo"></i></div><p>Domes</p></div>
+  <div class="filter" data-category="boats"><div><i class="fa-solid fa-sailboat"></i></div><p>Boats</p></div>
+
+  <!-- DESKTOP Toggle (shown only on PC) -->
+  <div class="tax-toggle tax-desktop">
+    <div class="form-check-reverse form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+      <label class="form-check-label" for="flexSwitchCheckDefault">
+        Display total after taxes
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE Toggle (shown only on mobile) -->
+<div class="tax-mobile-wrapper">
+  <div class="tax-toggle tax-mobile">
+    <div class="form-check-reverse form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchMobile" />
+      <label class="form-check-label"  for="flexSwitchMobile">
+        Display total after taxes
+      </label>
+    </div>
+  </div>
+</div>
+
 
     <div class="card-container">
         <% for(let listing of allListings){ %>
-            <a href="/listings/<%=listing._id%>">
-                <div class="card">
-                    <img src="<%=listing.image%>" alt="Listing Image">
+          <a href="/listings/<%=listing._id%>">
+                 <div class="card" data-categories='<%= JSON.stringify(listing.category || []) %>'>
+
+                    <img src="<%=listing.image.url%>" alt="Listing Image">
                     <div class="card-body">
                         <h5 class="card-title"><%=listing.title%></h5>
-                        <p class="card-price">&#8377; 
-                            <%= (listing.price != null && typeof listing.price === 'number') 
-                            ? listing.price.toLocaleString("en-IN") 
-                            : listing.price %>
+
+                        <p class="card-price">&#8377;
+                            <%= (listing.price != null && typeof listing.price === 'number')
+                            ? listing.price.toLocaleString("en-IN")
+                            : listing.price %> per night
                         </p>
-                     </div>
+
+                        <p class="tax-card-price">&#8377;
+                            <%= (listing.price != null && typeof listing.price === 'number')
+                            ? ((listing.price)+(listing.price*18/100)).toLocaleString("en-IN")
+                            : listing.price %> per night
+                            <i>(includes 18% GST)</i>
+                        </p>
+                    </div>
                 </div>
             </a>
         <% } %>
     </div>
+
+    <script>
+        let taxSwitchDesktop = document.getElementById("flexSwitchCheckDefault");
+let taxSwitchMobile = document.getElementById("flexSwitchMobile");
+let cardPrices = document.getElementsByClassName("card-price");
+let taxCardPrices = document.getElementsByClassName("tax-card-price");
+
+function togglePrices() {
+  for (let i = 0; i < cardPrices.length; i++) {
+    const price = cardPrices[i];
+    const taxPrice = taxCardPrices[i];
+    const visible = window.getComputedStyle(price).display !== "none";
+
+    price.style.display = visible ? "none" : "block";
+    taxPrice.style.display = visible ? "block" : "none";
+  }
+}
+
+taxSwitchDesktop?.addEventListener("click", togglePrices);
+taxSwitchMobile?.addEventListener("click", togglePrices);
+
+        
+        
+  const filters = document.querySelectorAll('.filter');
+
+  filters.forEach(filter => {
+    filter.addEventListener('click', () => {
+      const category = filter.getAttribute('data-category');
+      if (category === "all") {
+        window.location.href = "/listings"; // show all listings
+      } else {
+        window.location.href = `/listings/category/${category}`;
+      }
+    });
+  });
+
+    </script>
 </body>

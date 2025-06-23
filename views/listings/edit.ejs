@@ -1,46 +1,227 @@
 <% layout("layouts/boilerplate") %>
-<div class="row mt-3">
-    <div class="col-8 offset-2">
 
-    <form method="post" action="/listings/<%=listing.id%>?_method=PUT" class="needs-validation" novalidate>
+<style>
+  .edit-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
 
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" name="listing[title]" class="form-control" value="<%=listing.title%>" required>
-            <div class="invalid-feedback">Please enter valid title</div>
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea name="listing[description]" class="form-control" required><%=listing.description%></textarea>
-            <div class="invalid-feedback">Please enter valid Description</div>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Image</label>
-            <input type="text" name="listing[image]" class="form-control" value="<%=listing.image%>" required>
-            <div class="invalid-feedback">Please enter valid image url</div>
-        </div>
-        <div class="row">
+  .edit-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #fe424d;
+    text-align: center;
+  }
 
-            <div class="mb-3 col-md-4">
-                <label for="price" class="form-label">Price</label>
-                <input type="number" name="listing[price]" class="form-control" value="<%=listing.price%>" required>
-            <div class="invalid-feedback">Please enter valid price</div>
-            </div>
-            <div class="mb-3 col-md-8">
-                <label for="country" class="form-label">Country</label>
-                <input type="text" name="listing[country]" class="form-control" value="<%=listing.country%>" required>
-            <div class="invalid-feedback">Please enter valid country</div>
-            </div>
-        </div>
-            <div class="mb-3">
-            <label for="location" class="form-label">Location</label>
-            <input type="text" name="listing[location]" class="form-control" value="<%=listing.location%>" required>
-            <div class="invalid-feedback">Please enter valid location</div>
-        </div>
+  .back-link {
+    display: inline-block;
+    margin-bottom: 1.2rem;
+    text-decoration: none;
+    font-weight: 500;
+    color: #fe424d;
+  }
 
-        <button class="btn btn-dark edit-btn">Edit</button>
+  .back-link:hover {
+    text-decoration: underline;
+  }
 
+  .form-label {
+    font-weight: 500;
+    color: #444;
+  }
 
-    </form>
+  .form-control {
+    border-radius: 8px;
+  }
+
+  .listing-image {
+    max-height: 16rem;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+  }
+
+  .edit-btn {
+    background-color: #fe424d;
+    border: none;
+    color: #fff;
+    padding: 0.6rem 1.4rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .edit-btn:hover {
+    background-color: #e63946;
+  }
+</style>
+
+<div class="edit-container">
+  <h2 class="edit-title ">Edit Listing</h2>
+  <a href="/listings/<%= listing.id %>" class="back-link">&larr; Back to Listing</a>
+
+  <form
+    method="post"
+    action="/listings/<%= listing.id %>?_method=PUT"
+    class="needs-validation"
+    novalidate
+    enctype="multipart/form-data"
+  >
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        type="text"
+        name="listing[title]"
+        class="form-control"
+        value="<%= listing.title %>"
+        required
+      />
+      <div class="invalid-feedback">Please enter valid title</div>
     </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea
+        name="listing[description]"
+        class="form-control"
+        rows="4"
+        required
+      ><%= listing.description %></textarea>
+      <div class="invalid-feedback">Please enter valid Description</div>
+    </div>
+
+    <label class="form-label">Current Image</label>
+    <div class="mb-3">
+      <img
+        src="<%= originalImageUrl %>"
+        alt="Listing Image"
+        class="listing-image"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="image" class="form-label">Upload New Image</label>
+      <input type="file" name="listing[image]" class="form-control" />
+    </div>
+
+    <div class="row">
+      <div class="mb-3 col-md-4">
+        <label for="price" class="form-label">Price</label>
+        <input
+          type="number"
+          name="listing[price]"
+          class="form-control"
+          value="<%= listing.price %>"
+          required
+        />
+        <div class="invalid-feedback">Please enter valid price</div>
+      </div>
+
+      <div class="mb-3 col-md-8">
+        <label for="country" class="form-label">Country</label>
+        <input
+          type="text"
+          name="listing[country]"
+          class="form-control"
+          value="<%= listing.country %>"
+          required
+        />
+        <div class="invalid-feedback">Please enter valid country</div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="location" class="form-label">Location</label>
+      <input
+        type="text"
+        name="listing[location]"
+        class="form-control"
+        value="<%= listing.location %>"
+        required
+      />
+      <div class="invalid-feedback">Please enter valid location</div>
+    </div>
+
+    <!-- 🔽 Category Multi-Select -->
+    <div class="mb-4">
+      <label class="form-label">Select Categories</label>
+      <select id="categorySelect" class="form-select">
+        <option disabled selected>Select a category</option>
+        <option value="trending">Trending</option>
+        <option value="rooms">Rooms</option>
+        <option value="iconic-cities">Iconic Cities</option>
+        <option value="mountains">Mountains</option>
+        <option value="castles">Castles</option>
+        <option value="amazing-pools">Amazing Pools</option>
+        <option value="camping">Camping</option>
+        <option value="farms">Farms</option>
+        <option value="arctic">Arctic</option>
+        <option value="domes">Domes</option>
+        <option value="boats">Boats</option>
+      </select>
+
+      <!-- Pills -->
+      <div id="selectedCategories" class="d-flex flex-wrap gap-2 mt-3"></div>
+    </div>
+
+    <!-- Hidden Inputs for submission -->
+    <div id="hiddenCategoryInputs"></div>
+
+    <button class="btn edit-btn">Update</button>
+  </form>
 </div>
+
+<script>
+  const categorySelect = document.getElementById("categorySelect");
+  const selectedContainer = document.getElementById("selectedCategories");
+  const hiddenInputsContainer = document.getElementById("hiddenCategoryInputs");
+
+  let selectedCategories = [];
+
+  // Load from EJS backend
+  <% if (listing.category && listing.category.length) { %>
+    selectedCategories = <%- JSON.stringify(listing.category) %>;
+  <% } %>
+
+  renderCategories(); // Initial display
+
+  categorySelect.addEventListener("change", function () {
+    const value = this.value;
+    if (!selectedCategories.includes(value)) {
+      selectedCategories.push(value);
+      renderCategories();
+    }
+    this.selectedIndex = 0;
+  });
+
+  function removeCategory(cat) {
+    selectedCategories = selectedCategories.filter(c => c !== cat);
+    renderCategories();
+  }
+
+  function renderCategories() {
+    selectedContainer.innerHTML = "";
+    hiddenInputsContainer.innerHTML = "";
+
+    selectedCategories.forEach(cat => {
+      // Visible pill
+      const tag = document.createElement("div");
+      tag.className = "badge bg-light text-dark px-3 py-2 rounded-pill d-flex align-items-center";
+      tag.innerHTML = `${cat} <span style="cursor:pointer; margin-left:8px;" onclick="removeCategory('${cat}')">&times;</span>`;
+      selectedContainer.appendChild(tag);
+
+      // Hidden input
+      const hiddenInput = document.createElement("input");
+      hiddenInput.type = "hidden";
+      hiddenInput.name = "listing[category][]";
+      hiddenInput.value = cat;
+      hiddenInputsContainer.appendChild(hiddenInput);
+    });
+  }
+</script>

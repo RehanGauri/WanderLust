@@ -5,6 +5,11 @@ body{
 }
 .container{
     flex: 1;
+    margin: 0 auto;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+
 }
 
 
@@ -89,9 +94,19 @@ body{
     font-size: 1rem;
     /* color: #fe424d */
 }
-.card-container a{
+.card-container a {
+    border-radius: 8px;        /* match card radius */
     text-decoration: none;
+    overflow: hidden;          /* enforce clipping on scale */
+    display: block;            /* ensure it wraps the card fully */
+    transition: all 0.2s ease-in-out;
 }
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0 ,0.2);
+    transition: all 0.2s ease-in-out;
+}
+
 .card-container a:hover{
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(0, 0, 0 ,0.2);
@@ -121,3 +136,34 @@ body{
     background-color: #fe424d;
     border: none;
 }
+
+/* ===== GLOBAL VERTICAL SCROLLBAR (PC + Mobile) ===== */
+
+/* Chrome, Safari, Edge etc. */
+html::-webkit-scrollbar {
+  width: 6px; /* 👈 Thin vertical scrollbar */
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: #e63946;
+  border-radius: 40px;
+
+}
+
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #e63946;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #e63946 transparent;
+}
+/* **************************************** */
+
+
