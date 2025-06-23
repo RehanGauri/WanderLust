@@ -498,9 +498,9 @@ const sampleListings = [
 sampleListings.forEach((listing, index) => {
   // Alternate between rehan123 and rehangauri as owners
   if (index % 2 === 0) {
-    listing.owner = "68557ae7dba905eb38961506"; // rehan123
+    listing.owner = "68597a20ba7ec1771d3f9638"; // rehan123
   } else {
-    listing.owner = "6856463c1c7ccd8ac5ea1c81"; // rehangauri
+    listing.owner = "68597a4bba7ec1771d3f963f"; // rehangauri
   }
 });
 

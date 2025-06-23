@@ -208,7 +208,16 @@
 <body>
     <div id="filters">
   <!-- FILTER BUTTONS -->
+   
   <div class="filter" data-category="all"><div><i class="fa-solid fa-globe"></i></div><p>All</p></div>
+
+  <% if (currUser) { %>
+  <a href="/listings/my" class="filter" style="text-decoration: none;">
+    <div><i class="fa-solid fa-user"></i></div>
+    <p>My Listings</p>
+  </a>
+<% } %>
+
   <div class="filter" data-category="trending"><div><i class="fa-solid fa-fire"></i></div><p>Trending</p></div>
   <div class="filter" data-category="rooms"><div><i class="fa-solid fa-bed"></i></div><p>Rooms</p></div>
   <div class="filter" data-category="iconic-cities"><div><i class="fa-solid fa-mountain-city"></i></div><p>Iconic cities</p></div>

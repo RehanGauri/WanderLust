@@ -1,45 +1,56 @@
+require("dotenv").config({ path: "../.env" });
+
 const mongoose = require("mongoose");
 const initData = require("./data");
-const sampleReviews = require("./reviews"); // <- new file
+const sampleReviews = require("./reviews");
 const Listing = require("../models/listing");
 const Review = require("../models/review");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const urlDB = process.env.ATLASDB_URL;
 
+// Connect to MongoDB
+async function main() {
+  await mongoose.connect(urlDB);
+}
 main()
   .then(() => {
-    console.log("Connected to DB");
+    console.log("✅ Connected to MongoDB");
   })
   .catch((err) => {
-    console.log(err);
+    console.error("❌ MongoDB connection error:", err);
   });
 
-async function main() {
-  await mongoose.connect(MONGO_URL);
-}
-
+// Seed function
 const initDB = async () => {
-  await Listing.deleteMany({});
-  await Review.deleteMany({});
+  try {
+    await Listing.deleteMany({});
+    await Review.deleteMany({});
 
-  // Insert sample reviews
-  const createdReviews = await Review.insertMany(sampleReviews);
+    console.log("🗑️ Existing listings and reviews deleted.");
 
-  // Attach random reviews to each listing
-  const listingsWithReviews = initData.data.map((listing) => {
-    const randomReviews = createdReviews
-      .sort(() => 0.5 - Math.random()) // shuffle
-      .slice(0, Math.floor(Math.random() * 3) + 1); // 1-3 reviews
+    const createdReviews = await Review.insertMany(sampleReviews);
+    console.log("✅ Sample reviews inserted.");
 
-    return {
-      ...listing,
-      reviews: randomReviews.map((r) => r._id),
-    };
-  });
+    const listingsWithReviews = initData.data.map((listing) => {
+      const randomReviews = createdReviews
+        .sort(() => 0.5 - Math.random())
+        .slice(0, Math.floor(Math.random() * 3) + 1);
 
-  await Listing.insertMany(listingsWithReviews);
+      return {
+        ...listing,
+        owner: new mongoose.Types.ObjectId(listing.owner), // ✅ Owner string to ObjectId
+        reviews: randomReviews.map((r) => r._id),
+      };
+    });
 
-  console.log("Listings and reviews seeded successfully.");
+    await Listing.insertMany(listingsWithReviews);
+    console.log("✅ Listings with random reviews inserted.");
+    console.log("🌱 Seeding completed successfully.");
+    mongoose.connection.close(); // 🔒 Close connection after seeding
+  } catch (err) {
+    console.error("❌ Seeding failed:", err);
+    mongoose.connection.close();
+  }
 };
 
 initDB();

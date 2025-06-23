@@ -1,16 +1,40 @@
-<footer>
-    <div class="f-info">
-        <div class="f-info-socials">
-            <i class="fa-brands fa-square-facebook"></i>
-            <i class="fa-brands fa-square-instagram"></i>
-            <i class="fa-brands fa-linkedin"></i>
-        </div>
-        <div class="f-info-brand">&copy; WanderLust Private Limited</div>
-        <div class="f-info-links">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
-        </div>
+<footer class="mt-1">
+  <div class="f-info text-center py-3 px-3" style="background-color: #f8f9fa; border-top: 1px solid #dee2e6;">
+    
+    <!-- Connect Line -->
+    <p class="mb-4 fw-semibold fs-5" style="margin-top: -0.2rem;">Let’s Connect</p>
 
-    </div>  <!-- f-info -->
 
+    <!-- Social Icons -->
+    <div class="f-info-socials mb-3 d-flex justify-content-center gap-3">
+      <a href="https://www.instagram.com/rehucrystal7/" target="_blank" aria-label="Instagram">
+        <i class="fa-brands fa-instagram fa-xl" style="color: #e1306c;"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/rehangauri/" target="_blank" aria-label="LinkedIn">
+        <i class="fa-brands fa-facebook fa-xl" style="color: #0077b5;"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/rehangauri/" target="_blank" aria-label="LinkedIn">
+        <i class="fa-brands fa-linkedin fa-xl" style="color: #0077b5;"></i>
+      </a>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="f-info-links mb-1 d-flex justify-content-center flex-wrap gap-3 small">
+      <a href="/contact" class="text-decoration-none text-muted">Contact Me</a>
+      <a href="/about" class="text-decoration-none text-muted">About</a>
+      <a href="/privacy" class="text-decoration-none text-muted">Privacy</a>
+      <a href="/terms" class="text-decoration-none text-muted">Terms</a>
+    </div>
+
+    <!-- Brand Credit -->
+    <div class="f-info-brand text-muted small mb-1">
+      &copy; <%= new Date().getFullYear() %> WanderLust • Created by Rehan Gauri
+    </div>
+
+    <!-- FOMO for PC View -->
+    <p class="text-muted small mt-3 d-md-none">
+      🌟 This website is even more beautiful on a larger screen. Try it on your PC or laptop for the best experience! 💻✨
+    </p>
+
+  </div>
 </footer>

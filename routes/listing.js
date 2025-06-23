@@ -23,6 +23,14 @@ router
 // Create Route  (Add)
 router.get("/new", isLoggedIn, listingController.newListingForm);
 
+
+// show user's listings only
+router.get("/my", isLoggedIn, async (req, res) => {
+  const userId = req.user._id;
+  const listings = await Listing.find({ owner: userId });
+  res.render("listings/index", { allListings: listings, search: null });
+});
+
 router
   .route("/:id")
   .get(wrapAsync(listingController.showListing))
@@ -53,6 +61,8 @@ router.get("/category/:category", async (req, res) => {
     const allListings = await Listing.find({ category: category });
     res.render("listings/index", { allListings });
 });
+
+
 
 
 module.exports = router;

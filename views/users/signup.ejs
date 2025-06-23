@@ -1,60 +1,82 @@
 <% layout("layouts/boilerplate") %>
 
-<div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow rounded-4">
-        <div class="card-body p-4">
-          <h2 class="text-center mb-4">Create your account</h2>
-          <form action="/signup" method="POST" class="needs-validation" novalidate>
-            <div class="mb-3">
-              <label for="username" class="form-label">Username</label>
-              <input
-                type="text"
-                name="username"
-                class="form-control"
-                id="username"
-                placeholder="Enter your username"
-                required
-              />
-              <div class="invalid-feedback">Please enter your username</div>
-            </div>
+<style>
+  .auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
 
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input
-                type="email"
-                name="email"
-                class="form-control"
-                id="email"
-                placeholder="Enter your email"
-                required
-              />
-              <div class="invalid-feedback">Please enter a valid email</div>
-            </div>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-            <div class="mb-4">
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                name="password"
-                class="form-control"
-                id="password"
-                placeholder="Enter your password"
-                required
-              />
-              <div class="invalid-feedback">Please enter your password</div>
-            </div>
+@media (max-width: 768px) {
+  .auth-card {
+    max-width: 90%;
+    padding: 1.5rem;
+    border-radius: 1rem;
+  }
+}
 
-            <button class="btn w-100 text-white" style="background-color: #e63946">Sign Up</button>
-          </form>
+</style>
 
-          <p class="text-center mt-3">
-            Already have an account?
-            <a href="/login" style="color: #e63946; text-decoration: none">Login here</a>
-          </p>
-        </div>
+<div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+
+  <div class="auth-card">
+    <h2 class="text-center mb-4">Create Your Account</h2>
+
+    <form action="/signup" method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          id="username"
+          placeholder="Enter your username"
+          required
+        />
+        <div class="invalid-feedback">Please enter your username</div>
       </div>
-    </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          id="email"
+          placeholder="Enter your email"
+          required
+        />
+        <div class="invalid-feedback">Please enter a valid email</div>
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          id="password"
+          placeholder="Enter your password"
+          required
+        />
+        <div class="invalid-feedback">Please enter your password</div>
+      </div>
+
+      <button class="btn w-100 text-white" style="background-color: #e63946;">Sign Up</button>
+    </form>
+
+    <p class="text-center mt-3 mb-0 small">
+      Already have an account?
+      <a href="/login" class="text-danger text-decoration-none">Login here</a>
+    </p>
   </div>
 </div>
