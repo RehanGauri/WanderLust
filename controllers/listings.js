@@ -4,11 +4,11 @@ require("dotenv").config();
 
 
 module.exports.index = async (req, res) => {
-  const { search } = req.query;
+  const { search, page = 1, limit = 9 } = req.query;
 
   let query = {};
   if (search) {
-    const regex = new RegExp(search, 'i'); // case-insensitive
+    const regex = new RegExp(search, 'i');
     query = {
       $or: [
         { title: regex },
@@ -18,8 +18,37 @@ module.exports.index = async (req, res) => {
     };
   }
 
-  const allListings = await Listing.find(query);
-  res.render("listings/index", { allListings, search }); // pass search term
+  const total = await Listing.countDocuments(query);
+  const allListings = await Listing.find(query)
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  res.render("listings/index", {
+    allListings,
+    search: search || "",
+    currentPage: parseInt(page),
+    totalPages: Math.ceil(total / limit)
+  });
+};
+
+
+module.exports.filterByCategory = async (req, res) => {
+  const { name } = req.params;
+  const { page = 1, limit = 9 } = req.query;
+
+  const query = { category: name };
+  const total = await Listing.countDocuments(query);
+  const allListings = await Listing.find(query)
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  res.render("listings/index", {
+    allListings,
+    search: "",
+    category: name, // ✅ This is important for pagination
+    currentPage: parseInt(page),
+    totalPages: Math.ceil(total / limit)
+  });
 };
 
 

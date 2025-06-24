@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync");
 const Listing = require("../models/listing");
+const listingsController = require("../controllers/listings");
 
 const { isLoggedIn, isOwner, validateListing } = require("../middleware");
 const listingController = require("../controllers/listings");
@@ -28,8 +29,18 @@ router.get("/new", isLoggedIn, listingController.newListingForm);
 router.get("/my", isLoggedIn, async (req, res) => {
   const userId = req.user._id;
   const listings = await Listing.find({ owner: userId });
-  res.render("listings/index", { allListings: listings, search: null });
+  res.render("listings/index", {
+    allListings: listings,
+    search: "",
+    category: null,
+    currentPage: 1,
+    totalPages: 1
+  });
 });
+
+
+router.get("/category/:name", listingsController.filterByCategory);
+
 
 router
   .route("/:id")
